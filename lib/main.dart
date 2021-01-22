@@ -30,31 +30,49 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
+  int rightAnswers = 0;
+  int qCount = quizBrain.getQCount();
 
   void checkAnswer(bool userPickedAnswer) {
     bool correctAnswer = quizBrain.getCorrectAnswer();
 
     setState(() {
-      //TODO: Step 4 - Use IF/ELSE to check if we've reached the end of the quiz. If true, execute Part A, B, C, D.
-      if (quizBrain.isFinished()) {
-        //TODO Make alert button
-      }
-      //TODO: Step 4 Part C - reset the questionNumber,
-      //TODO: Step 4 Part D - empty out the scoreKeeper.
 
-      //TODO: Step 5 - If we've not reached the end, ELSE do the answer checking steps below 👇
-      if (userPickedAnswer == correctAnswer) {
-        scoreKeeper.add(Icon(
-          Icons.check,
-          color: Colors.green,
-        ));
+      if (quizBrain.isFinished()) {
+        Alert(
+            context: context,
+            type: AlertType.success,
+            title: 'YOU FINISHED',
+            desc:
+                'You got $rightAnswers out of $qCount correct. Not bad. Not bad at all.',
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "Nice.",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pop(context),
+                width: 120,
+              )
+            ]).show();
+        quizBrain.reset();
+        scoreKeeper.clear();
       } else {
-        scoreKeeper.add(Icon(
-          Icons.close,
-          color: Colors.red,
-        ));
+        //TODO: Step 5 - If we've not reached the end, ELSE do the answer checking steps below 👇
+        if (userPickedAnswer == correctAnswer) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+          rightAnswers++;
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+        quizBrain.nextQuestion();
       }
-      quizBrain.nextQuestion();
     });
   }
 

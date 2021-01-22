@@ -31,6 +31,11 @@ class QuizBrain {
         true),
   ];
 
+
+  int getQCount() {
+    return _questionBank.length;
+  }
+
   void nextQuestion() {
     if (_questionNumber < _questionBank.length - 1) {
       _questionNumber++;
